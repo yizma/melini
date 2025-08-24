@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🌹 Surat Cinta Interaktif</title>
+    <style>
+      :root {
+        --bg1: #0f0c29;
+        --bg2: #302b63;
+        --bg3: #24243e; /* dreamy gradient */
+        --pink: #ff4d79;
+        --soft: #ffd6e7;
+        --text: #fff;
+        --muted: #d1d5db;
+        --card: #ffffff10;
+        --glass: #ffffff22;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial;
+        color: var(--text);
+        background: radial-gradient(
+            1200px 800px at 20% -10%,
+            #ff5f9e20,
+            transparent 60%
+          ),
+          radial-gradient(800px 600px at 120% 10%, #8b5cf620, transparent 60%),
+          linear-gradient(135deg, var(--bg1), var(--bg2) 50%, var(--bg3));
+        overflow: hidden;
+      }
+
+      /* floating hearts background */
+      .bg-hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .heart {
+        position: absolute;
+        font-size: 14px;
+        opacity: 0.9;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+        animation: floatUp linear var(--dur) forwards;
+        transform: translate(-50%, 0) scale(var(--scale));
+        color: var(--soft);
+      }
+      @keyframes floatUp {
+        from {
+          transform: translate(var(--x, 0), 110vh) scale(var(--scale));
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        to {
+          transform: translate(calc(var(--x, 0)), -10vh) scale(var(--scale));
+          opacity: 0;
+        }
+      }
+
+      main {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .card {
+        width: min(780px, 92vw);
+        border-radius: 28px;
+        padding: 28px 22px 18px;
+        backdrop-filter: blur(12px) saturate(120%);
+        background: linear-gradient(180deg, #ffffff24, #ffffff12);
+        border: 1px solid #ffffff30;
+        box-shadow: var(--shadow);
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .badge {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffe4ee;
+        background: #ff5f9e33;
+        border: 1px solid #ff5f9e66;
+        padding: 6px 10px;
+        border-radius: 999px;
+      }
+
+      .title {
+        font-size: clamp(28px, 4.6vw, 46px);
+        line-height: 1.1;
+        margin: 8px 0 12px;
+        font-weight: 800;
+      }
+      .subtitle {
+        color: var(--muted);
+        margin: 0 0 16px;
+        font-size: clamp(14px, 2.3vw, 16px);
+      }
+
+      .type {
+        min-height: 70px;
+        font-size: clamp(18px, 2.9vw, 22px);
+        line-height: 1.5;
+      }
+      .cursor {
+        display: inline-block;
+        width: 10px;
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 18px 0 8px;
+      }
+      .btn {
+        position: relative;
+        appearance: none;
+        border: 0;
+        padding: 14px 18px;
+        border-radius: 16px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 0.08s ease, box-shadow 0.2s ease,
+          background 0.3s ease;
+        user-select: none;
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      .btn-primary {
+        background: linear-gradient(180deg, #ff7aa8, #ff4d79);
+        color: white;
+        box-shadow: 0 10px 30px #ff4d7966;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.02);
+      }
+      .btn-ghost {
+        background: #ffffff22;
+        color: #fff;
+        border: 1px solid #ffffff44;
+      }
+
+      .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: #e5e7eb80;
+        font-size: 12px;
+        margin-top: 10px;
+      }
+
+      .settings {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+      }
+      .circle {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #ffffff1f;
+        border: 1px solid #ffffff3b;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .circle:hover {
+        transform: rotate(10deg);
+      }
+
+      .panel {
+        position: fixed;
+        right: 16px;
+        top: 68px;
+        width: min(360px, 92vw);
+        background: #0b0a17ee;
+        border: 1px solid #ffffff22;
+        border-radius: 18px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
+        display: none;
+        z-index: 5;
+      }
+      .panel.open {
+        display: block;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+        margin: 10px 0;
+      }
+      label {
+        font-size: 12px;
+        color: #e5e7ebb0;
+      }
+      input[type="text"],
+      input[type="tel"] {
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid #ffffff2f;
+        background: #141326;
+        color: #fff;
+      }
+
+      .yes-screen {
+        display: none;
+        text-align: center;
+      }
+      .yes-screen.active {
+        display: block;
+      }
+      .hidden {
+        display: none;
+      }
+
+      .confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      /* naughty No button behaviour */
+      .playful {
+        position: relative;
+      }
+
+      @media (max-width: 480px) {
+        .actions {
+          justify-content: space-between;
+        }
+        .btn {
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-hearts" id="bg"></div>
+
+    <main>
+      <div class="card" role="region" aria-label="Surat Cinta Interaktif">
+        <div class="topbar">
+          <span class="badge">pesan dari hati</span>
+          <div class="settings">
+            <button
+              id="gear"
+              class="circle"
+              title="Pengaturan"
+              aria-label="Pengaturan"
+            >
+              ⚙️
+            </button>
+          </div>
+        </div>
+
+        <h1 class="title">Hai, <span id="namaDia">Kamu</span> ✨</h1>
+        <p class="subtitle">
+          Aku nulis ini sambil deg-degan… semoga kamu suka ya 💖
+        </p>
+
+        <div id="typewriter" class="type" aria-live="polite"></div>
+
+        <div class="actions">
+          <button id="btnYes" class="btn btn-primary">Iya, aku mau 💞</button>
+          <button id="btnNo" class="btn btn-ghost playful">
+            Aku pikir-pikir dulu 🙈
+          </button>
+        </div>
+
+        <div class="yes-screen" id="yesScreen">
+          <h2 style="margin: 8px 0 6px; font-size: clamp(24px, 3.8vw, 36px)">
+            Yeeay! Alhamdulilah di tarima euy anjay 💫
+          </h2>
+          <p style="margin: 0 0 14px; color: #e5e7eb">
+            Mulai hari ini, <span id="aku">Aku</span> &
+            <span id="dia2">Mell</span> resmi jadian di tanggal 24 Agustus 2025.
+            Siap menua bareng kah ckckck? 😘
+          </p>
+          <div class="actions" style="justify-content: center">
+            <button id="btnShare" class="btn btn-primary">
+              Kirim ke WhatsApp
+            </button>
+            <button id="btnReplay" class="btn btn-ghost">
+              Putar Ulang Pesan
+            </button>
+          </div>
+        </div>
+
+        <div class="foot">
+          <span
+            >Tekan "Iya" buat kejutan manis. Kalau tekan "pikir-pikir"… yah,
+            tombolnya suka malu-malu. 😅</span
+          >
+          <span>© 2025 • dibuat dengan ❤️</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Config Panel -->
+    <aside class="panel" id="panel">
+      <h3 style="margin: 0 0 8px">Pengaturan</h3>
+      <div class="field">
+        <label for="inAku">Namamu</label>
+        <input id="inAku" type="text" placeholder="mis. Ahmad" />
+      </div>
+      <div class="field">
+        <label for="inDia">Nama dia</label>
+        <input id="inDia" type="text" placeholder="mis. Ella" />
+      </div>
+      <div class="field">
+        <label for="inWa">6289527185605</label>
+        <input id="inWa" type="tel" placeholder="mis. 6281234567890" />
+      </div>
+      <div class="actions" style="justify-content: flex-end">
+        <button id="btnSave" class="btn btn-primary">Simpan</button>
+      </div>
+    </aside>
+
+    <canvas class="confetti" id="confetti"></canvas>
+
+    <script>
+      // ====== Utils ======
+      const $ = (sel) => document.querySelector(sel);
+      const rand = (a, b) => Math.random() * (b - a) + a;
+
+      // ====== Names / Config ======
+      let state = { aku: "Aku", dia: "Kamu", wa: "" };
+
+      function loadState() {
+        try {
+          const s = JSON.parse(localStorage.getItem("bucin-config"));
+          if (s) state = { ...state, ...s };
+        } catch {}
+        $("#inAku").value = state.aku;
+        $("#inDia").value = state.dia;
+        $("#inWa").value = state.wa;
+        updateNames();
+      }
+      function saveState() {
+        state.aku = $("#inAku").value?.trim() || "Aku";
+        state.dia = $("#inDia").value?.trim() || "Kamu";
+        state.wa = $("#inWa").value?.replace(/\D/g, "") || "";
+        localStorage.setItem("bucin-config", JSON.stringify(state));
+        updateNames();
+        $("#panel").classList.remove("open");
+        typeStart();
+      }
+      function updateNames() {
+        $("#namaDia").textContent = state.dia;
+        $("#aku").textContent = state.aku;
+        $("#dia2").textContent = state.dia;
+      }
+
+      // ====== Typewriter ======
+      const lines = [
+        () => `Hai ${state.dia}…`,
+        () =>
+          `Kalau Boleh jujur? Setiap hari ${state.aku} selalu mikirin kamu  loh.`,
+        () => `Apakah kamu juga sama Mell?.`,
+        () => `Perasaan ini tumbuh perlahan entah bagaimana caranya.`,
+        () =>
+          `${state.aku} tidak tahu apakah kita memiliki perasaan yang sama atau tidak.`,
+        () => ` Tapi disini aku hanya ingin mengukapkan perasaan ini ke kamu.`,
+        () =>
+          ` Aku suka sama kamu Mell, Maukah kamu jadi bagian di hidup ${state.aku}? 💖`,
+      ];
+
+      let typingIdx = 0,
+        charIdx = 0,
+        typingTimer = null,
+        deleting = false;
+
+      function typeStart() {
+        clearInterval(typingTimer);
+        typingIdx = 0;
+        charIdx = 0;
+        deleting = false;
+        $("#typewriter").innerHTML = "";
+        typeNext();
+      }
+
+      function typeNext() {
+        if (typingIdx >= lines.length) {
+          return;
+        }
+        const content = lines[typingIdx]();
+        const el = document.createElement("div");
+        el.innerHTML = '<span class="t"></span><span class="cursor">|</span>';
+        $("#typewriter").appendChild(el);
+        const span = el.querySelector(".t");
+        charIdx = 0;
+        deleting = false;
+        typingTimer = setInterval(() => {
+          if (!deleting) {
+            span.textContent = content.slice(0, ++charIdx);
+            if (charIdx >= content.length) {
+              clearInterval(typingTimer);
+              setTimeout(() => {
+                typingIdx++;
+                typeNext();
+              }, 600);
+            }
+          }
+        }, 22);
+      }
+
+      // ====== Floating background hearts ======
+      function spawnBgHearts() {
+        const bg = $("#bg");
+        for (let i = 0; i < 24; i++) {
+          const h = document.createElement("div");
+          h.className = "heart";
+          h.textContent = Math.random() > 0.5 ? "❤" : "💖";
+          const x = rand(-40, window.innerWidth + 40);
+          const scale = rand(0.6, 1.6).toFixed(2);
+          const dur = rand(8, 16).toFixed(2) + "s";
+          h.style.left = x + "px";
+          h.style.setProperty("--x", x + "px");
+          h.style.setProperty("--scale", scale);
+          h.style.setProperty("--dur", dur);
+          h.style.animationDelay = rand(-8, 0) + "s";
+          bg.appendChild(h);
+        }
+      }
+
+      // ====== Playful "No" button ======
+      function makeButtonShy(btn) {
+        const bounds = btn.getBoundingClientRect();
+        let attempts = 0;
+        btn.addEventListener("mouseover", () => {
+          attempts++;
+          const parent = btn.parentElement.getBoundingClientRect();
+          const w = bounds.width,
+            h = bounds.height;
+          const nx = rand(0, parent.width - w);
+          const ny = rand(0, 100); // stay roughly near buttons
+          btn.style.transform = `translate(${nx - btn.offsetLeft}px, ${
+            ny - btn.offsetTop
+          }px)`;
+          btn.textContent = attempts > 2 ? "Kejar aku dulu 😜" : "Eits, malu~";
+        });
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          btn.dispatchEvent(new Event("mouseover"));
+        });
+      }
+
+      // ====== Confetti Hearts ======
+      function burstHearts(count = 120) {
+        const cvs = $("#confetti");
+        const ctx = cvs.getContext("2d");
+        const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        function resize() {
+          cvs.width = innerWidth * DPR;
+          cvs.height = innerHeight * DPR;
+          cvs.style.width = innerWidth + "px";
+          cvs.style.height = innerHeight + "px";
+          ctx.scale(DPR, DPR);
+        }
+        resize();
+        let parts = new Array(count).fill(0).map(() => ({
+          x: rand(0, innerWidth),
+          y: rand(-40, innerHeight / 2),
+          r: rand(8, 16),
+          vx: rand(-2, 2),
+          vy: rand(-1, 1),
+          a: rand(0, Math.PI * 2),
+          va: rand(-0.1, 0.1),
+        }));
+        let t = 0;
+        const maxT = 1800; // ~3s
+        function drawHeart(x, y, r) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(0.2 * Math.sin(y * 0.02));
+          ctx.beginPath();
+          const k = r / 16;
+          // simple heart shape
+          ctx.moveTo(0, -6 * k);
+          ctx.bezierCurveTo(6 * k, -16 * k, 20 * k, -6 * k, 0, 12 * k);
+          ctx.bezierCurveTo(-20 * k, -6 * k, -6 * k, -16 * k, 0, -6 * k);
+          ctx.closePath();
+          ctx.fillStyle = t % 2 ? "#ffc2d6" : "#ff4d79";
+          ctx.fill();
+          ctx.restore();
+        }
+        const start = performance.now();
+        (function loop(now) {
+          t = now - start;
+          if (t > maxT) {
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            return;
+          }
+          ctx.clearRect(0, 0, innerWidth, innerHeight);
+          parts.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy + 1.2;
+            p.a += p.va;
+            p.vx *= 0.995;
+            p.vy *= 0.995;
+            drawHeart(p.x + 8 * Math.cos(p.a), p.y + 8 * Math.sin(p.a), p.r);
+          });
+          requestAnimationFrame(loop);
+        })(start);
+      }
+
+      // ====== Actions ======
+      function onYes() {
+        $("#yesScreen").classList.add("active");
+        burstHearts();
+        // gentle scroll into view on small screens
+        $("#yesScreen").scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function onReplay() {
+        $("#yesScreen").classList.remove("active");
+        typeStart();
+      }
+
+      function onShareWA() {
+        const base = "https://wa.me/6289527185605";
+        const phone = state.wa || "";
+        const text = `Hai ${state.dia}! %0A%0A${state.aku} mau jujur… %0A${state.aku} suka sama kamu. %0AMaukah kamu jadi pasangan ${state.aku}? 💖`;
+        const url = phone
+          ? `${base}${phone}?text=${text}`
+          : `${base}?text=${text}`;
+        window.open(url, "_blank");
+      }
+
+      // ====== Events ======
+      window.addEventListener("load", () => {
+        loadState();
+        typeStart();
+        spawnBgHearts();
+        makeButtonShy($("#btnNo"));
+        $("#btnYes").addEventListener("click", onYes);
+        $("#btnReplay").addEventListener("click", onReplay);
+        $("#btnShare").addEventListener("click", onShareWA);
+        $("#gear").addEventListener("click", () =>
+          $("#panel").classList.toggle("open")
+        );
+        $("#btnSave").addEventListener("click", saveState);
+      });
+
+      // Accessibility hint for keyboard
+      $("#btnNo").addEventListener("focus", () => {
+        $("#btnNo").textContent = "Jangan tekan aku 🙃";
+      });
+      $("#btnNo").addEventListener("blur", () => {
+        $("#btnNo").textContent = "Aku pikir-pikir dulu 🙈";
+      });
+    </script>
+  </body>
+</html>
